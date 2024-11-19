@@ -1,0 +1,5 @@
+npm i @nestjs/mapped-types // dto sınıflarının birbirine extend etmesini sağlar
+
+npm i typeorm
+npm i nestjs/typeorm
+npm i pg
