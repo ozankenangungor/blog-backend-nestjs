@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { PostsService } from './services/posts.service';
@@ -22,6 +22,8 @@ export class PostsController {
     return this.postsService.findAll(userId);
   }
 
+
+
   @ApiOperation({
     summary: 'Creates a new post for the blog.',
   })
@@ -32,8 +34,10 @@ export class PostsController {
   })
   @Post()
   public createPost(@Body() createPostDto: CreatePostDto) {
-    console.log(createPostDto);
+    return this.postsService.create(createPostDto);
   }
+
+
 
   @ApiOperation({
     summary: 'Updates and existing blog post in the database.',
@@ -46,5 +50,10 @@ export class PostsController {
   @Patch()
   public updatePost(@Body() patchPostsDto: PatchPostDto) {
     console.log(patchPostsDto);
+  }
+
+  @Delete()
+  public deletePost(@Query('id', ParseIntPipe) id: number) {
+    return this.postsService.delete(id);
   }
 }

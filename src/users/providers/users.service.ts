@@ -25,8 +25,8 @@ export class UsersService {
 
         //Create a new user
         let newUser = this.usersRepository.create(createUserDto);
-        newUser = await this.usersRepository.save(newUser);
-        return newUser;
+        return await this.usersRepository.save(newUser);
+        
     }
     
  
