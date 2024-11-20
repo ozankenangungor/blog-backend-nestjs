@@ -1,8 +1,10 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { CreatePostMetaOptionsDto } from '../meta-options/dtos/create-post-meta-options.dto';
 import { PostType } from './enums/post-type.enum';
 import { postStatus } from './enums/post-status.enum';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
+import { User } from 'src/users/user.entity';
+import { Tag } from 'src/tags/tag.entity';
 
 @Entity()
 export class Post {
@@ -65,9 +67,14 @@ export class Post {
   })
   publishOn?: Date;
 
-  // Work on these in lecture on relationships
-  tags?: string[];
 
   @OneToOne(() => MetaOption, (metaOptions) => metaOptions.post, {cascade: true, eager: true }) //! cascade: ['remove','insert']
   metaOptions?: MetaOption;
+
+  @ManyToOne(() => User, (user) => user.posts, {eager: true})
+  author: User;
+
+  @ManyToMany(()=> Tag )
+  @JoinTable()
+  tags?: Tag[];
 }

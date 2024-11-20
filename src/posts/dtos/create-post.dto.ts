@@ -3,8 +3,10 @@ import { postStatus } from '../enums/post-status.enum';
 import {
   IsArray,
   IsEnum,
+  IsInt,
   IsISO8601,
   IsJSON,
+  isNotEmpty,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -78,12 +80,14 @@ export class CreatePostDto {
   @IsOptional()
   publishOn?: Date;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Array of ids of tags',
+    example: [1,2]
+  })
   @IsArray()
   @IsOptional()
-  @IsString({ each: true })
-  @MinLength(3, { each: true })
-  tags?: string[];
+  @IsInt({ each: true })
+  tags?: number[];
 
   
   @ApiPropertyOptional({
@@ -101,4 +105,13 @@ export class CreatePostDto {
   @ValidateNested()
   @Type(() => CreatePostMetaOptionsDto)
   metaOptions?: CreatePostMetaOptionsDto | null;
+
+  @ApiProperty({
+    type: 'integer',
+    required: true,
+    example: 1
+  })
+  @IsNotEmpty()
+  @IsInt()
+  authorId: number;
 }
