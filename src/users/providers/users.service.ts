@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dtos/create-user.dto';
+import { ConfigService, ConfigType } from '@nestjs/config';
+import profileConfig from '../config/profile.config';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +14,9 @@ export class UsersService {
         @Inject(forwardRef(() => AuthService))
         private readonly authService: AuthService,
         @InjectRepository(User)
-        private usersRepository: Repository<User>
+        private usersRepository: Repository<User>,
+        @Inject(profileConfig.KEY)
+        private readonly profileConfiguration: ConfigType<typeof profileConfig>
     ){}
 
     public async createUser(createUserDto: CreateUserDto) {
@@ -33,6 +37,15 @@ export class UsersService {
         return await this.usersRepository.findOneBy({id})
     }
     
+    
+    public findAll(
+        getUserParamDto: GetUsersParamDto,
+        limit: number,
+        page: number,
+    ){
+       // test the new config
+       console.log(this.profileConfiguration)
+    }
  
     
 }

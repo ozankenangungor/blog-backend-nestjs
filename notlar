@@ -5,3 +5,6 @@ npm i nestjs/typeorm
 npm i pg
 
 npm i @nestjs/config
+
+
+"start:dev": "cross-env NODE_ENV=development nest start --watch", // cross-env paketi olmadan .env özellikleri olmaz

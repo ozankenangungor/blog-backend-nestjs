@@ -22,10 +22,8 @@ export class PostsService {
     public async create(@Body() createPostDto: CreatePostDto) {      
         // Find author from database based on authorId
         let author = await this.usersService.findOneById(createPostDto.authorId);
-        console.log(author)
         // Find tags 
         let tags = await this.tagsService.findMultipleTags(createPostDto.tags);
-        console.log(tags)
 
          // Create post
          let post = this.postRepository.create({

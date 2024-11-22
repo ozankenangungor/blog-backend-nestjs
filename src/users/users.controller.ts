@@ -13,7 +13,7 @@ export class UsersController {
         private readonly usersService: UsersService
     ){}
 
-    @Get('/:id')
+    @Get('/:id?')
     @ApiOperation({
         summary: 'Fetches a list of registered users on the application'
     })
@@ -39,10 +39,8 @@ export class UsersController {
         @Param() getUserParamDto: GetUsersParamDto, 
         @Query('limit') limit: number,
         @Query('page') page: number
-    )
-
-        {
-
+    ){
+        return this.usersService.findAll(getUserParamDto, limit, page);
     }
 
     @Post() 
