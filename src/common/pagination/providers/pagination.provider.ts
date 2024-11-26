@@ -33,7 +33,7 @@ export class PaginationProvider {
     // Calculate page numbers
     const totalItems = await repository.count();
     const totalPages = Math.ceil(totalItems / paginationQuery.limit);
-    const nextPage =
+    const nextPage =+
       paginationQuery.page === totalPages
         ? paginationQuery.page
         : paginationQuery.page + 1;
