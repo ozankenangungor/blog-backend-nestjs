@@ -8,6 +8,8 @@ import { CreateUserDto } from '../dtos/create-user.dto';
 import { ConfigService, ConfigType } from '@nestjs/config';
 import profileConfig from '../config/profile.config';
 import { error } from 'console';
+import { UsersCreateManyProvider } from './users-create-many.provider';
+import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 
 @Injectable()
 export class UsersService {
@@ -19,7 +21,8 @@ export class UsersService {
         @Inject(profileConfig.KEY)
         private readonly profileConfiguration: ConfigType<typeof profileConfig>,
 
-        private readonly dataSource: DataSource
+        private readonly usersCreateManyProvider: UsersCreateManyProvider
+
     ){}
 
     public async createUser(createUserDto: CreateUserDto) {
@@ -33,6 +36,7 @@ export class UsersService {
             },
           });
         } catch (error) {
+          console.log(error)
           // Might want to save these errors with more information in a log file or database
           // You don't need to send this sensitive information to user
           throw new RequestTimeoutException(
@@ -104,6 +108,12 @@ export class UsersService {
         }
       }
 
+
+      public async createMany(createManyUsersDto: CreateManyUsersDto){
+        return await this.usersCreateManyProvider.createMany(createManyUsersDto);
+      }
+
+    
     
     }
  

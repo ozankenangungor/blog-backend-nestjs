@@ -8,6 +8,8 @@ import { Post } from '../post.entity';
 import { TagsService } from 'src/tags/providers/tags.service';
 import { PatchPostDto } from '../dtos/patch-post.dto';
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
+import { GetPostsDto } from '../dtos/get-post.dto';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 
 @Injectable()
 export class PostsService {
@@ -17,7 +19,8 @@ export class PostsService {
         @InjectRepository(MetaOption)
         private readonly metaOptionRepository: Repository<MetaOption>,
         @InjectRepository(Post)
-        private readonly postRepository: Repository<Post>
+        private readonly postRepository: Repository<Post>,
+        private readonly paginationProvider: PaginationProvider
     ){}
 
     public async create(@Body() createPostDto: CreatePostDto) {      
@@ -38,16 +41,23 @@ export class PostsService {
     }
 
 
-    public async findAll(userId: string) {
+    public async findAll(userId: string, postQuery: GetPostsDto) {
 
-        let posts = await this.postRepository.find({
-            relations: {
-                metaOptions: true,
-                //author: true // same as eager: true
-                tags: true
-            }
-        });
+        // let posts = await this.postRepository.find({
+        //     relations: {
+        //         metaOptions: true,
+        //         //author: true // same as eager: true
+        //         tags: true
+        //     },
+        //     take: postQuery.limit,
+        //     skip: (postQuery.page -1) * postQuery.limit
+        // });
 
+        let posts = await this.paginationProvider.paginateQuery({
+          limit: postQuery.limit,
+          page: postQuery.page
+        }, this.postRepository);
+        console.log(posts)
 
         return posts;
     }
